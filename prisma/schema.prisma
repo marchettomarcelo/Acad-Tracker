@@ -14,11 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
 
 // Necessary for Next auth
 model Account {
@@ -55,6 +50,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  workOutSession workOutSession[]
 }
 
 model VerificationToken {
@@ -63,4 +59,49 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+
+model Date{
+  id String @id @default(cuid())
+  day Int
+  month Int
+  year Int
+  dayOfWeek DayOfWeek
+  workOutSessions workOutSession[]
+}
+
+enum MuscleGroup {
+  CHEST
+  BACK
+  BICEPS
+  TRICEPS
+  SHOULDERS
+  LEGS
+  ABS
+
+}
+
+model workOutSession {
+  id String @id @default(cuid())
+
+  muscleGroup MuscleGroup[]
+
+  cardio Boolean
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  date Date @relation(fields: [dateId], references: [id], onDelete: Cascade)
+  dateId String
 }
