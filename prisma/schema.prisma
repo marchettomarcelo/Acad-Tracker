@@ -71,11 +71,26 @@ enum DayOfWeek {
   SUNDAY
 }
 
+enum Month {
+  JANUARY
+  FEBRUARY
+  MARCH
+  APRIL
+  MAY
+  JUNE
+  JULY
+  AUGUST
+  SEPTEMBER
+  OCTOBER
+  NOVEMBER
+  DECEMBER
+}
+
 
 model Date{
   id String @id @default(cuid())
   day Int
-  month Int
+  month Month
   year Int
   dayOfWeek DayOfWeek
   workOutSessions workOutSession[]
