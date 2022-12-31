@@ -61,41 +61,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-enum DayOfWeek {
-  MONDAY
-  TUESDAY
-  WEDNESDAY
-  THURSDAY
-  FRIDAY
-  SATURDAY
-  SUNDAY
-}
-
-enum Month {
-  JANUARY
-  FEBRUARY
-  MARCH
-  APRIL
-  MAY
-  JUNE
-  JULY
-  AUGUST
-  SEPTEMBER
-  OCTOBER
-  NOVEMBER
-  DECEMBER
-}
-
-
-model Date{
-  id String @id @default(cuid())
-  day Int
-  month Month
-  year Int
-  dayOfWeek DayOfWeek
-  workOutSessions workOutSession[]
-}
-
 enum MuscleGroup {
   CHEST
   BACK
@@ -117,6 +82,6 @@ model workOutSession {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  date Date @relation(fields: [dateId], references: [id], onDelete: Cascade)
-  dateId String
+  date DateTime
+  
 }

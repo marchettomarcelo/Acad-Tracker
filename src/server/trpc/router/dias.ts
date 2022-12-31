@@ -8,16 +8,26 @@ export const datasRouter = router({
   }),
 
   getMeses: protectedProcedure.query(async ({ ctx }) => {
-    const data = await ctx.prisma.date.findMany({
-      select: {
-        month: true,
-        year: true,
-      },
+    const months = [
+      "JANUARY",
+      "FEBRUARY",
+      "MARCH",
+      "APRIL",
+      "MAY",
+      "JUNE",
+      "JULY",
+      "AUGUST",
+      "SEPTEMBER",
+      "OCTOBER",
+      "NOVEMBER",
+      "DECEMBER",
+    ];
 
-      distinct: ["month", "year"],
-    });
+    const year = 2023;
 
-    return data;
+    const monthYear = months.map((month) => ({ month, year }));
+
+    return monthYear;
   }),
 
   getDatas: protectedProcedure
@@ -28,13 +38,40 @@ export const datasRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const data = await ctx.prisma.date.findMany({
-        where: {
+      const months = [
+        "JANUARY",
+        "FEBRUARY",
+        "MARCH",
+        "APRIL",
+        "MAY",
+        "JUNE",
+        "JULY",
+        "AUGUST",
+        "SEPTEMBER",
+        "OCTOBER",
+        "NOVEMBER",
+        "DECEMBER",
+      ];
+
+      const daysInMonth = new Date(
+        input.year,
+        months.indexOf(input.month) + 1,
+        0
+      ).getDate();
+
+      const monthYearDays = [];
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(input.year, months.indexOf(input.month), day);
+        const dayOfWeek = date.toLocaleString("default", { weekday: "long" });
+        monthYearDays.push({
           month: input.month,
           year: input.year,
-        },
-      });
+          day,
+          dayOfWeek,
+        });
+      }
 
-      return data;
+      console.log(monthYearDays);
     }),
 });
