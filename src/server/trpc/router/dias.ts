@@ -1,12 +1,7 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
-import { Month } from "@prisma/client";
 
 export const datasRouter = router({
-  getDias: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.date.findMany();
-  }),
-
   getMeses: protectedProcedure.query(async () => {
     const months = [
       "JANUARY",
