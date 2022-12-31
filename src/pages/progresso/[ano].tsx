@@ -29,7 +29,7 @@ export default function MonthProgress() {
         </Link>
       </header>
 
-      <div className="mb-8 flex w-2/4 flex-col gap-8">
+      <div className="mb-8 flex w-10/12 flex-col gap-8 lg:w-1/2">
         {daysOfTheMonth.data?.map(({ day, dayOfWeek }, index) => {
           return <DayCard day={day} dayOfWeek={dayOfWeek} key={index} />;
         })}
