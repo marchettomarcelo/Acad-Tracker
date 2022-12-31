@@ -20,7 +20,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="grid grid-cols-4 gap-6 p-8">
+      <div className="grid grid-cols-1 gap-6 p-8 md:grid-cols-2 lg:grid-cols-3 xl:lg:grid-cols-4">
         {availableMonths.data?.map(({ year, month }, index) => {
           return (
             <Link
@@ -36,7 +36,7 @@ const Home: NextPage = () => {
       <main className="flex flex-col items-center">
         <h1 className="text-lg font-bold">Você esta logado</h1>
         <button
-          className=" w-1/4 rounded border-2 px-4 py-2 font-bold"
+          className=" w-1/4 rounded border bg-slate-50 px-4 py-2 font-bold shadow-lg"
           onClick={() => signOut()}
         >
           Sign out

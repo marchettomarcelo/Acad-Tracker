@@ -7,7 +7,7 @@ export const datasRouter = router({
     return ctx.prisma.date.findMany();
   }),
 
-  getMeses: protectedProcedure.query(async ({ ctx }) => {
+  getMeses: protectedProcedure.query(async () => {
     const months = [
       "JANUARY",
       "FEBRUARY",
@@ -33,11 +33,11 @@ export const datasRouter = router({
   getDatas: protectedProcedure
     .input(
       z.object({
-        month: z.nativeEnum(Month),
+        month: z.string(),
         year: z.number(),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .query(async ({ input }) => {
       const months = [
         "JANUARY",
         "FEBRUARY",
@@ -64,14 +64,17 @@ export const datasRouter = router({
       for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(input.year, months.indexOf(input.month), day);
         const dayOfWeek = date.toLocaleString("default", { weekday: "long" });
+
         monthYearDays.push({
           month: input.month,
           year: input.year,
           day,
           dayOfWeek,
+          numberDayOfWeek: date.getDay(),
+          numberMonth: months.indexOf(input.month),
         });
       }
 
-      console.log(monthYearDays);
+      return monthYearDays;
     }),
 });
