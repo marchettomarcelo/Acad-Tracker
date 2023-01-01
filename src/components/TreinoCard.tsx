@@ -3,12 +3,14 @@ export default function TreinoCard({
   value,
   nome,
   handleCheckboxChange,
+  wasChecked,
 }: {
   value: string;
   nome: string;
+  wasChecked: boolean;
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(wasChecked ? wasChecked : false);
   return (
     <div className="flex items-center rounded border border-gray-200 pl-4 dark:border-gray-700">
       <input

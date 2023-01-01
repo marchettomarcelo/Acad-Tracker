@@ -5,9 +5,8 @@ import DayCard from "../../components/DayCard";
 
 export default function MonthProgress() {
   const router = useRouter();
-  const { ano, mes } = router.query;
 
-  // try to pasrse ano and mes to number and string
+  const { ano, mes } = router.query;
   const year = Number(ano);
   const month = mes as string;
 
@@ -18,8 +17,7 @@ export default function MonthProgress() {
     }
   );
 
-  const treinosFeitos = trpc.treinos.getTreinos.useQuery({ year, month });
-  console.log("treinos feitos", treinosFeitos.data);
+  console.log("daysOfTheMonth", daysOfTheMonth.data);
 
   return (
     <main className="flex w-full flex-col items-center gap-4">
@@ -34,16 +32,29 @@ export default function MonthProgress() {
 
       <div className="mb-8 flex w-10/12 flex-col gap-8 lg:w-1/2">
         {daysOfTheMonth.data?.map(
-          ({ day, dayOfWeek, numberMonth, year }, index) => {
-            return (
-              <DayCard
-                day={day}
-                dayOfWeek={dayOfWeek}
-                key={index}
-                numberMonth={numberMonth}
-                year={year}
-              />
-            );
+          ({ day, dayOfWeek, numberMonth, year, workout }, index) => {
+            if (workout === null) {
+              return (
+                <DayCard
+                  day={day}
+                  dayOfWeek={dayOfWeek}
+                  key={index}
+                  numberMonth={numberMonth}
+                  year={year}
+                />
+              );
+            } else {
+              return (
+                <DayCard
+                  day={day}
+                  dayOfWeek={dayOfWeek}
+                  key={index}
+                  numberMonth={numberMonth}
+                  year={year}
+                  workOut={workout}
+                />
+              );
+            }
           }
         )}
       </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TreinoCard from "./TreinoCard";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import { MuscleGroup } from "@prisma/client";
+import { MuscleGroup, workOutSession } from "@prisma/client";
 import SelectedWorkouts from "./SelectedWorkouts";
 import { trpc } from "../utils/trpc";
 
@@ -10,19 +10,22 @@ export default function DayCard({
   dayOfWeek,
   numberMonth,
   year,
+  workOut,
 }: {
   day: number;
   dayOfWeek: string;
   numberMonth: number;
   year: number;
+  workOut?: workOutSession;
 }) {
-
   const [open, setOpen] = useState(false);
-  const [cardio, setCardio] = useState(false);
+  const [cardio, setCardio] = useState(workOut ? workOut.cardio : false);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<
-  MuscleGroup[]
-  >([]);
-  
+    MuscleGroup[]
+  >(workOut ? workOut.muscleGroup : []);
+
+  console.log("selectedMuscleGroups", workOut, day);
+
   const criarTreino = trpc.treinos.createTreino.useMutation();
 
   const handleSave = () => {
@@ -79,6 +82,7 @@ export default function DayCard({
         <div className="flex flex-col items-center">
           <hr className="border-1 my-6 h-0.5 w-full rounded-md bg-black" />
           <SelectedWorkouts
+            selectedMuscleGroups={selectedMuscleGroups}
             handleCheckboxChange={handleCheckboxChange}
             handleCardioChange={handleCardioChange}
           />

@@ -4,9 +4,13 @@ import TreinoCard from "./TreinoCard";
 function SelectedWorkouts({
   handleCheckboxChange,
   handleCardioChange,
+  selectedMuscleGroups,
+  cardio,
 }: {
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleCardioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  selectedMuscleGroups: MuscleGroup[];
+  cardio: boolean;
 }) {
   const muscleGroups = Object.values(MuscleGroup);
   return (
@@ -20,6 +24,7 @@ function SelectedWorkouts({
           {muscleGroups.map((muscleGroup) => {
             return (
               <TreinoCard
+                wasChecked={selectedMuscleGroups.includes(muscleGroup)}
                 handleCheckboxChange={handleCheckboxChange}
                 key={muscleGroup}
                 value={muscleGroup}
@@ -32,6 +37,7 @@ function SelectedWorkouts({
           <div className="mr-4 flex items-center">
             <input
               onChange={handleCardioChange}
+              checked={cardio ? cardio : false}
               id="inline-checked-checkbox"
               type="checkbox"
               className="h-4 w-4 cursor-pointer rounded border-gray-300 bg-gray-100  dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 "

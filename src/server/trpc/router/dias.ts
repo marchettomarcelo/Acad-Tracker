@@ -60,6 +60,15 @@ export const datasRouter = router({
         const date = new Date(input.year, months.indexOf(input.month), day);
         const dayOfWeek = date.toLocaleString("default", { weekday: "long" });
 
+        // see if there is an workout for this day
+        const workout = await prisma?.workOutSession.findFirst({
+          where: {
+            date: {
+              equals: new Date(input.year, months.indexOf(input.month), day),
+            },
+          },
+        });
+
         monthYearDays.push({
           month: input.month,
           year: input.year,
@@ -67,6 +76,7 @@ export const datasRouter = router({
           dayOfWeek,
           numberDayOfWeek: date.getDay(),
           numberMonth: months.indexOf(input.month),
+          workout: workout ? workout : null,
         });
       }
 
