@@ -74,14 +74,13 @@ enum MuscleGroup {
 
 model workOutSession {
   id String @id @default(cuid())
-
   muscleGroup MuscleGroup[]
-
   cardio Boolean
-  
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
-
   date DateTime
+  rest Boolean @default(false)
+  skipped Boolean @default(false)
   
+  @@unique([userId, date])
 }

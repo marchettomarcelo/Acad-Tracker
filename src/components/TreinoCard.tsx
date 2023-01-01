@@ -12,7 +12,7 @@ export default function TreinoCard({
 }) {
   const [isChecked, setIsChecked] = useState(wasChecked ? wasChecked : false);
   return (
-    <div className="flex items-center rounded border border-gray-200 pl-4 dark:border-gray-700">
+    <div className="flex items-center rounded border border-gray-200 bg-white pl-4 dark:border-gray-700">
       <input
         id="bordered-checkbox-2"
         type="checkbox"

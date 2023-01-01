@@ -62,4 +62,25 @@ export const treinosRouter = router({
       });
       return response;
     }),
+
+  editTreino: protectedProcedure
+    .input(
+      z.object({
+        workOutId: z.string(),
+        cardio: z.boolean(),
+        muscleGoups: z.array(z.nativeEnum(MuscleGroup)),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const response = await ctx.prisma.workOutSession.update({
+        where: {
+          id: input.workOutId,
+        },
+        data: {
+          cardio: input.cardio,
+          muscleGroup: input.muscleGoups,
+        },
+      });
+      return response;
+    }),
 });

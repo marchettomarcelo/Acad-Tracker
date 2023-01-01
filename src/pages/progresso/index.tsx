@@ -10,8 +10,6 @@ import MonthsCard from "../../components/MonthsCard";
 const Home: NextPage = () => {
   const availableMonths = trpc.datas.getMeses.useQuery();
 
-  console.log("opa", availableMonths.data);
-
   return (
     <>
       <Head>

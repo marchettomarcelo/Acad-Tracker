@@ -31,9 +31,9 @@ export const datasRouter = router({
       })
     )
     .query(async ({ input }) => {
-      
       const indexMes = months.indexOf(input.month);
-      const numeroDias = new Date(input.year, indexMes + 1, 0).getDate();
+      
+      const numeroDias = new Date(input.year, indexMes, 0).getDate();
 
       const workoutsInMonth = await prisma?.workOutSession.findMany({
         where: {

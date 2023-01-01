@@ -26,7 +26,7 @@ const months = [
 const dateList = [];
 
 for (let month = 0; month < months.length; month++) {
-  const daysInMonth = new Date(2023, month + 1, 0).getDate(); // get the number of days in the month
+  const daysInMonth = new Date(2023, month, 0).getDate(); // get the number of days in the month
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(2023, month, day);
     if (date.getMonth() === month) {
