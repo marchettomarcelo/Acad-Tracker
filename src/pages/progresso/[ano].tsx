@@ -17,7 +17,10 @@ export default function MonthProgress() {
       enabled: !!year && !!month,
     }
   );
-  console.log(daysOfTheMonth.data);
+
+  const treinosFeitos = trpc.treinos.getTreinos.useQuery({ year, month });
+  console.log("treinos feitos", treinosFeitos.data);
+
   return (
     <main className="flex w-full flex-col items-center gap-4">
       <header className="mt-4 flex w-10/12 flex-col items-start lg:w-1/2">
@@ -30,9 +33,19 @@ export default function MonthProgress() {
       </header>
 
       <div className="mb-8 flex w-10/12 flex-col gap-8 lg:w-1/2">
-        {daysOfTheMonth.data?.map(({ day, dayOfWeek }, index) => {
-          return <DayCard day={day} dayOfWeek={dayOfWeek} key={index} />;
-        })}
+        {daysOfTheMonth.data?.map(
+          ({ day, dayOfWeek, numberMonth, year }, index) => {
+            return (
+              <DayCard
+                day={day}
+                dayOfWeek={dayOfWeek}
+                key={index}
+                numberMonth={numberMonth}
+                year={year}
+              />
+            );
+          }
+        )}
       </div>
     </main>
   );

@@ -21,7 +21,7 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="grid grid-cols-1 gap-6 p-8 md:grid-cols-2 lg:grid-cols-3 xl:lg:grid-cols-4">
-        {availableMonths.data?.map(({ year, month }, index) => {
+        {availableMonths.data?.map(({ year, month, }, index) => {
           return (
             <Link
               href={`http://localhost:3000/progresso/${year}?mes=${month}`}

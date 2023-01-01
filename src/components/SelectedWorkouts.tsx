@@ -11,7 +11,6 @@ function SelectedWorkouts({
   const muscleGroups = Object.values(MuscleGroup);
   return (
     <>
-      <hr className="border-1 my-4 h-0.5 rounded-md bg-black " />
       <div className="flex w-full flex-col items-start gap-4 ">
         <p className="font-semibold">
           Selecione os grupos musculares treinados:

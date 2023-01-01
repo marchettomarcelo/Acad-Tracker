@@ -3,20 +3,50 @@ import TreinoCard from "./TreinoCard";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { MuscleGroup } from "@prisma/client";
 import SelectedWorkouts from "./SelectedWorkouts";
+import { trpc } from "../utils/trpc";
 
 export default function DayCard({
   day,
   dayOfWeek,
+  numberMonth,
+  year,
 }: {
   day: number;
   dayOfWeek: string;
+  numberMonth: number;
+  year: number;
 }) {
+
   const [open, setOpen] = useState(false);
   const [cardio, setCardio] = useState(false);
-
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<
-    MuscleGroup[]
+  MuscleGroup[]
   >([]);
+  
+  const criarTreino = trpc.treinos.createTreino.useMutation();
+
+  const handleSave = () => {
+    type certo = (
+      | "CHEST"
+      | "BACK"
+      | "BICEPS"
+      | "TRICEPS"
+      | "SHOULDERS"
+      | "LEGS"
+      | "ABS"
+      | "FOREARMS"
+    )[];
+
+    const novo: certo = selectedMuscleGroups;
+
+    criarTreino.mutate({
+      day,
+      cardio,
+      year,
+      muscleGoups: novo,
+      monthIndex: numberMonth,
+    });
+  };
 
   const handleCardioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCardio(e.target.checked);
@@ -47,11 +77,15 @@ export default function DayCard({
       {/* <button onClick={() => console.log(selectedMuscleGroups)}>oasd</button> */}
       {open && (
         <div className="flex flex-col items-center">
+          <hr className="border-1 my-6 h-0.5 w-full rounded-md bg-black" />
           <SelectedWorkouts
             handleCheckboxChange={handleCheckboxChange}
             handleCardioChange={handleCardioChange}
           />
-          <button className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-lg font-medium  focus:outline-none focus:ring-4 focus:ring-lime-200 group-hover:from-teal-300  ">
+          <button
+            onClick={handleSave}
+            className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-lg font-medium  "
+          >
             <span className="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">
               Salvar treino
             </span>
