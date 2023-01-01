@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { trpc } from "../../utils/trpc";
 import DayCard from "../../components/DayCard";
+import { useRef } from "react";
 
 export default function MonthProgress() {
   const router = useRouter();
