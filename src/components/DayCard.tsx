@@ -1,5 +1,4 @@
 import { useState } from "react";
-import TreinoCard from "./TreinoCard";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { MuscleGroup, workOutSession } from "@prisma/client";
 import SelectedWorkouts from "./SelectedWorkouts";
@@ -77,7 +76,6 @@ export default function DayCard({
           className="h-6 w-6 cursor-pointer"
         />
       </div>
-      {/* <button onClick={() => console.log(selectedMuscleGroups)}>oasd</button> */}
       {open && (
         <div className="flex flex-col items-center">
           <hr className="border-1 my-6 h-0.5 w-full rounded-md bg-black" />
@@ -85,6 +83,7 @@ export default function DayCard({
             selectedMuscleGroups={selectedMuscleGroups}
             handleCheckboxChange={handleCheckboxChange}
             handleCardioChange={handleCardioChange}
+            cardio={cardio}
           />
           <button
             onClick={handleSave}
