@@ -1,17 +1,26 @@
-import { MuscleGroup } from "@prisma/client";
+import { MuscleGroup, workOutSession } from "@prisma/client";
 import TreinoCard from "./TreinoCard";
+
 
 function SelectedWorkouts({
   handleCheckboxChange,
   handleCardioChange,
   selectedMuscleGroups,
   cardio,
+  workOut,
 }: {
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleCardioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   selectedMuscleGroups: MuscleGroup[];
   cardio: boolean;
+  workOut?: workOutSession;
 }) {
+
+
+
+
+
+
   const muscleGroups = Object.values(MuscleGroup);
   return (
     <>

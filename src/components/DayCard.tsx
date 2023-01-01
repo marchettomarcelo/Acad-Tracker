@@ -17,13 +17,15 @@ export default function DayCard({
   year: number;
   workOut?: workOutSession;
 }) {
+
+
   const [open, setOpen] = useState(false);
+  
   const [cardio, setCardio] = useState(workOut ? workOut.cardio : false);
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<
     MuscleGroup[]
   >(workOut ? workOut.muscleGroup : []);
 
-  console.log("selectedMuscleGroups", workOut, day);
 
   const criarTreino = trpc.treinos.createTreino.useMutation();
 
@@ -84,6 +86,7 @@ export default function DayCard({
             handleCheckboxChange={handleCheckboxChange}
             handleCardioChange={handleCardioChange}
             cardio={cardio}
+            workOut={workOut}
           />
           <button
             onClick={handleSave}

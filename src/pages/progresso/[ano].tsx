@@ -33,28 +33,16 @@ export default function MonthProgress() {
       <div className="mb-8 flex w-10/12 flex-col gap-8 lg:w-1/2">
         {daysOfTheMonth.data?.map(
           ({ day, dayOfWeek, numberMonth, year, workout }, index) => {
-            if (workout === null) {
-              return (
-                <DayCard
-                  day={day}
-                  dayOfWeek={dayOfWeek}
-                  key={index}
-                  numberMonth={numberMonth}
-                  year={year}
-                />
-              );
-            } else {
-              return (
-                <DayCard
-                  day={day}
-                  dayOfWeek={dayOfWeek}
-                  key={index}
-                  numberMonth={numberMonth}
-                  year={year}
-                  workOut={workout}
-                />
-              );
-            }
+            return (
+              <DayCard
+                day={day}
+                dayOfWeek={dayOfWeek}
+                key={index}
+                numberMonth={numberMonth}
+                year={year}
+                workOut={workout || undefined}
+              />
+            );
           }
         )}
       </div>

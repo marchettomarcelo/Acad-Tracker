@@ -1,27 +1,25 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
+const months = [
+  "JANUARY",
+  "FEBRUARY",
+  "MARCH",
+  "APRIL",
+  "MAY",
+  "JUNE",
+  "JULY",
+  "AUGUST",
+  "SEPTEMBER",
+  "OCTOBER",
+  "NOVEMBER",
+  "DECEMBER",
+];
+
 export const datasRouter = router({
   getMeses: protectedProcedure.query(async () => {
-    const months = [
-      "JANUARY",
-      "FEBRUARY",
-      "MARCH",
-      "APRIL",
-      "MAY",
-      "JUNE",
-      "JULY",
-      "AUGUST",
-      "SEPTEMBER",
-      "OCTOBER",
-      "NOVEMBER",
-      "DECEMBER",
-    ];
-
     const year = 2023;
-
     const monthYear = months.map((month) => ({ month, year }));
-
     return monthYear;
   }),
 
@@ -33,40 +31,29 @@ export const datasRouter = router({
       })
     )
     .query(async ({ input }) => {
-      const months = [
-        "JANUARY",
-        "FEBRUARY",
-        "MARCH",
-        "APRIL",
-        "MAY",
-        "JUNE",
-        "JULY",
-        "AUGUST",
-        "SEPTEMBER",
-        "OCTOBER",
-        "NOVEMBER",
-        "DECEMBER",
-      ];
+      
+      const indexMes = months.indexOf(input.month);
+      const numeroDias = new Date(input.year, indexMes + 1, 0).getDate();
 
-      const daysInMonth = new Date(
-        input.year,
-        months.indexOf(input.month) + 1,
-        0
-      ).getDate();
+      const workoutsInMonth = await prisma?.workOutSession.findMany({
+        where: {
+          date: {
+            gte: new Date(input.year, indexMes, 1),
+            lte: new Date(input.year, indexMes, numeroDias),
+          },
+        },
+      });
 
       const monthYearDays = [];
 
-      for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(input.year, months.indexOf(input.month), day);
+      for (let day = 1; day <= numeroDias; day++) {
+        const date = new Date(input.year, indexMes, day);
         const dayOfWeek = date.toLocaleString("default", { weekday: "long" });
 
         // see if there is an workout for this day
-        const workout = await prisma?.workOutSession.findFirst({
-          where: {
-            date: {
-              equals: new Date(input.year, months.indexOf(input.month), day),
-            },
-          },
+        const workout = workoutsInMonth?.find((workout) => {
+          const workoutDate = new Date(workout.date);
+          return workoutDate.getDate() === day;
         });
 
         monthYearDays.push({
@@ -75,7 +62,7 @@ export const datasRouter = router({
           day,
           dayOfWeek,
           numberDayOfWeek: date.getDay(),
-          numberMonth: months.indexOf(input.month),
+          numberMonth: indexMes,
           workout: workout ? workout : null,
         });
       }
