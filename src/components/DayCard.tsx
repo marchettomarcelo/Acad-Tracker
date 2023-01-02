@@ -12,12 +12,17 @@ export default function DayCard({
   numberMonth,
   year,
   workOut,
+  editMode,
+  setEditMode,
 }: {
   day: number;
   dayOfWeek: string;
   numberMonth: number;
   year: number;
   workOut?: workOutSession;
+
+  editMode: boolean;
+  setEditMode: (value: React.SetStateAction<boolean>) => void;
 }) {
   const [edit, setEdit] = useState(false);
 
@@ -34,9 +39,29 @@ export default function DayCard({
 
   function handleEdit() {
     // only one day can be edited at a time so if the user clicks on a different day while editing, the previous day should be set to false
-
     setEdit(!edit);
+    setEditMode(!editMode);
   }
+
+  const icone = () => {
+    if (workOut?.rest) {
+      return <ClockIcon className="h-6 w-6" stroke="#FBBF24" strokeWidth={2} />;
+    } else if (workOut?.skipped) {
+      return (
+        <NoSymbolIcon className="h-6 w-6" stroke="#EF4444" strokeWidth={2} />
+      );
+    } else if (workOut) {
+      return (
+        <CheckCircleIcon
+          className="h-6 w-6 "
+          stroke="#22C55E"
+          strokeWidth={2}
+        />
+      );
+    } else {
+      return null;
+    }
+  };
 
   return (
     <div
@@ -48,32 +73,22 @@ export default function DayCard({
         </h1>
 
         <div className="flex flex-row gap-4">
-          {workOut?.rest ? (
-            <ClockIcon className="h-6 w-6" stroke="#FBBF24" strokeWidth={2} />
-          ) : workOut?.skipped ? (
-            <NoSymbolIcon
-              className="h-6 w-6"
-              stroke="#EF4444"
-              strokeWidth={2}
-            />
-          ) : workOut ? (
-            <CheckCircleIcon
-              className="h-6 w-6 "
-              stroke="#22C55E"
-              strokeWidth={2}
-            />
-          ) : null}
+          {icone()}
 
-          <PencilSquareIcon
-            onClick={handleEdit}
-            className="h-6 w-6 cursor-pointer"
-          />
+          {!editMode && (
+            <PencilSquareIcon
+              onClick={handleEdit}
+              className="h-6 w-6 cursor-pointer"
+            />
+          )}
         </div>
       </div>
       {edit && (
         <div className="flex flex-col items-center">
           <hr className="border-1 my-6 h-0.5 w-full rounded-md bg-black" />
           <SelectedWorkouts
+            setEditMode={setEditMode}
+            setEdit={setEdit}
             day={day}
             numberMonth={numberMonth}
             year={year}

@@ -9,11 +9,16 @@ function SelectedWorkouts({
   numberMonth,
   year,
   workOut,
+  setEdit,
+
+  setEditMode,
 }: {
+  setEdit: (value: React.SetStateAction<boolean>) => void;
   day: number;
   numberMonth: number;
   year: number;
   workOut?: workOutSession;
+  setEditMode: (value: React.SetStateAction<boolean>) => void;
 }) {
   // --- State ---
   const [cardio, setCardio] = useState(workOut ? workOut.cardio : false);
@@ -36,6 +41,8 @@ function SelectedWorkouts({
   const editarTreino = trpc.treinos.editTreino.useMutation({
     onSuccess: () => {
       context.datas.getDatas.invalidate();
+      setEditMode(false);
+      setEdit(false);
     },
   });
 
@@ -73,6 +80,20 @@ function SelectedWorkouts({
         selectedMuscleGroups.filter((muscleGroup) => muscleGroup !== value)
       );
     }
+  };
+
+  // --- helper function to edit the workout ---
+  const handleEdit = () => {
+    if (!workOut) {
+      return;
+    }
+    editarTreino.mutate({
+      workOutId: workOut?.id,
+      cardio,
+      muscleGoups: selectedMuscleGroups,
+      skipped: selectedOption === "skipped",
+      rest: selectedOption === "rest",
+    });
   };
 
   // --- gamb ---
@@ -178,19 +199,11 @@ function SelectedWorkouts({
         <div className="flex w-full flex-col items-center justify-center">
           {workOut ? (
             <button
-              onClick={() =>
-                editarTreino.mutate({
-                  workOutId: workOut.id,
-                  cardio,
-                  muscleGoups: selectedMuscleGroups,
-                  skipped: selectedOption === "skipped",
-                  rest: selectedOption === "rest",
-                })
-              }
+              onClick={handleEdit}
               className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-300 to-pink-300 p-0.5 text-lg font-medium  "
             >
               <span className="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">
-                Editar treino
+                Salvar Alterações
               </span>
             </button>
           ) : (

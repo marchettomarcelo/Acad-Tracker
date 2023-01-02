@@ -19,6 +19,8 @@ export default function MonthProgress() {
     }
   );
 
+  const [editMode, setEditMode] = useState(false);
+  
   return (
     <main className="flex w-full flex-col items-center gap-4">
       <header className="mt-4 flex w-10/12 flex-col items-start lg:w-1/2">
@@ -35,6 +37,9 @@ export default function MonthProgress() {
           ({ day, dayOfWeek, numberMonth, year, workout }, index) => {
             return (
               <DayCard
+                editMode={editMode}
+                setEditMode={setEditMode}
+
                 day={day}
                 dayOfWeek={dayOfWeek}
                 key={index}
