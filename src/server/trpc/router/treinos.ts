@@ -12,6 +12,8 @@ export const treinosRouter = router({
         year: z.number(),
         monthIndex: z.number(),
         day: z.number(),
+        rest: z.boolean(),
+        skipped: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -20,6 +22,8 @@ export const treinosRouter = router({
           cardio: input.cardio,
           muscleGroup: input.muscleGoups,
           userId: ctx.session.user.id,
+          rest: input.rest,
+          skipped: input.skipped,
 
           date: new Date(input.year, input.monthIndex, input.day),
         },
@@ -69,6 +73,8 @@ export const treinosRouter = router({
         workOutId: z.string(),
         cardio: z.boolean(),
         muscleGoups: z.array(z.nativeEnum(MuscleGroup)),
+        skipped: z.boolean(),
+        rest: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -77,6 +83,8 @@ export const treinosRouter = router({
           id: input.workOutId,
         },
         data: {
+          skipped: input.skipped,
+          rest: input.rest,
           cardio: input.cardio,
           muscleGroup: input.muscleGoups,
         },

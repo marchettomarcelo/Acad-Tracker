@@ -18,8 +18,6 @@ export default function MonthProgress() {
     }
   );
 
-  console.log("daysOfTheMonth", daysOfTheMonth.data);
-
   return (
     <main className="flex w-full flex-col items-center gap-4">
       <header className="mt-4 flex w-10/12 flex-col items-start lg:w-1/2">

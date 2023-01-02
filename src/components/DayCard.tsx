@@ -20,7 +20,6 @@ export default function DayCard({
   const [edit, setEdit] = useState(false);
 
   let borderColor = "";
-  console.log(workOut);
   if (workOut) {
     if (workOut.skipped === true) {
       borderColor = "border-red-500";
@@ -42,7 +41,7 @@ export default function DayCard({
         </h1>
 
         <div className="flex flex-row gap-4">
-          {workOut && (
+          {workOut && !workOut.rest && !workOut.skipped && (
             <CheckCircleIcon
               className="h-6 w-6 "
               stroke="#22C55E"
