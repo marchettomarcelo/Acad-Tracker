@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { NoSymbolIcon } from "@heroicons/react/24/outline";
+import { ClockIcon } from "@heroicons/react/24/outline";
 import { workOutSession } from "@prisma/client";
 import SelectedWorkouts from "./SelectedWorkouts";
 
@@ -24,11 +26,16 @@ export default function DayCard({
     if (workOut.skipped === true) {
       borderColor = "border-red-500";
     } else if (workOut.rest === true) {
-      console.log("rest");
       borderColor = "border-yellow-500";
     } else {
       borderColor = "border-green-500";
     }
+  }
+
+  function handleEdit() {
+    // only one day can be edited at a time so if the user clicks on a different day while editing, the previous day should be set to false
+
+    setEdit(!edit);
   }
 
   return (
@@ -41,15 +48,24 @@ export default function DayCard({
         </h1>
 
         <div className="flex flex-row gap-4">
-          {workOut && !workOut.rest && !workOut.skipped && (
+          {workOut?.rest ? (
+            <ClockIcon className="h-6 w-6" stroke="#FBBF24" strokeWidth={2} />
+          ) : workOut?.skipped ? (
+            <NoSymbolIcon
+              className="h-6 w-6"
+              stroke="#EF4444"
+              strokeWidth={2}
+            />
+          ) : workOut ? (
             <CheckCircleIcon
               className="h-6 w-6 "
               stroke="#22C55E"
               strokeWidth={2}
             />
-          )}
+          ) : null}
+
           <PencilSquareIcon
-            onClick={() => setEdit(!edit)}
+            onClick={handleEdit}
             className="h-6 w-6 cursor-pointer"
           />
         </div>

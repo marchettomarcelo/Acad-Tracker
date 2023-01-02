@@ -17,11 +17,9 @@ function SelectedWorkouts({
 }) {
   // --- State ---
   const [cardio, setCardio] = useState(workOut ? workOut.cardio : false);
-  const [status, setStatus] = useState(
-    workOut
-      ? { skipped: workOut.skipped, rest: workOut.rest }
-      : { skipped: false, rest: true, treino: false }
-  );
+  const [selectedOption, setSelectedOption] = useState<
+    "skipped" | "treinou" | "rest"
+  >(workOut?.skipped ? "skipped" : workOut?.rest ? "rest" : "treinou");
 
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<
     MuscleGroup[]
@@ -48,8 +46,8 @@ function SelectedWorkouts({
     criarTreino.mutate({
       day,
       cardio,
-      skipped: status.skipped,
-      rest: status.rest,
+      skipped: selectedOption === "skipped",
+      rest: selectedOption === "rest",
       year,
       muscleGoups: novo,
       monthIndex: numberMonth,
@@ -62,21 +60,8 @@ function SelectedWorkouts({
   };
 
   // --- helper function to change state ---
-  const handleStatusChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked } = e.target;
-    // set value to true and the other to false
-    setStatus({ rest: checked, skipped: !checked, treino: !checked });
-  };
-  const handleStatusChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("skipped");
-    const { checked } = e.target;
-    // set value to true and the other to false
-    setStatus({ rest: !checked, skipped: checked, treino: !checked });
-  };
-  const handleStatusChange3 = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked } = e.target;
-    // set value to true and the other to false
-    setStatus({ rest: !checked, skipped: !checked, treino: checked });
+  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedOption(event.target.value as "skipped" | "treinou" | "rest");
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,18 +81,23 @@ function SelectedWorkouts({
   return (
     <>
       <div className="flex w-full flex-col items-start gap-4 ">
+        <button onClick={() => console.log(selectedOption)}>opa</button>
         <h3 className=" font-semibold text-gray-900 ">O que você fez hoje?</h3>
-        <ul className="w-full items-center rounded-lg border border-black  bg-white text-sm font-medium text-gray-900   sm:flex">
+        <ul
+          id={day as unknown as string}
+          className="w-full items-center rounded-lg border border-black  bg-white text-sm font-medium text-gray-900   sm:flex"
+        >
           <li className="w-full ">
             <div className="flex items-center pl-3">
               <input
-                id="horizontal-list-radio-license"
+                key={1}
+                id={day as unknown as string}
                 type="radio"
-                checked={status.rest || true}
-                onChange={handleStatusChange1}
+                checked={selectedOption === "rest"}
+                onChange={handleOptionChange}
                 name="list-radio"
                 value="rest"
-                className="h-4 w-4 bg-gray-100"
+                className="bg-gray h-4 w-4 cursor-pointer rounded border-gray-300"
               />
               <label className="ml-2 w-full py-3 text-sm font-medium text-gray-900 ">
                 Descansou
@@ -117,13 +107,14 @@ function SelectedWorkouts({
           <li className="w-full border-black ">
             <div className="flex items-center border-black pl-3">
               <input
-                id="horizontal-list-radio-id"
+                key={2}
+                id={day as unknown as string}
                 type="radio"
                 value="skipped"
                 name="list-radio"
-                className="h-4 w-4"
-                onChange={handleStatusChange2}
-                checked={status.skipped || false}
+                className="bg-gray h-4 w-4 cursor-pointer rounded border-gray-300"
+                checked={selectedOption === "skipped"}
+                onChange={handleOptionChange}
               />
               <label className="ml-2 w-full py-3 text-sm font-medium text-gray-900 ">
                 Skip
@@ -133,13 +124,14 @@ function SelectedWorkouts({
           <li className="w-full border-black ">
             <div className="flex items-center border-black pl-3">
               <input
-                id="horizontal-list-radio-id"
+                key={3}
+                id={day as unknown as string}
                 type="radio"
-                value="treino"
+                value="treinou"
                 name="list-radio"
-                className="h-4 w-4"
-                onChange={handleStatusChange3}
-                checked={status.treino || false}
+                className="bg-gray h-4 w-4 cursor-pointer rounded border-gray-300"
+                checked={selectedOption === "treinou"}
+                onChange={handleOptionChange}
               />
               <label className="ml-2 w-full py-3 text-sm font-medium text-gray-900 ">
                 Treinou
@@ -148,7 +140,7 @@ function SelectedWorkouts({
           </li>
         </ul>
 
-        {status?.treino && (
+        {selectedOption == "treinou" && (
           <>
             <p className="font-semibold">
               Selecione os grupos musculares treinados:
@@ -191,11 +183,11 @@ function SelectedWorkouts({
                   workOutId: workOut.id,
                   cardio,
                   muscleGoups: selectedMuscleGroups,
-                  skipped: status.skipped,
-                  rest: status.rest,
+                  skipped: selectedOption === "skipped",
+                  rest: selectedOption === "rest",
                 })
               }
-              className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-300 to-orange-300 p-0.5 text-lg font-medium  "
+              className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-300 to-pink-300 p-0.5 text-lg font-medium  "
             >
               <span className="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">
                 Editar treino
