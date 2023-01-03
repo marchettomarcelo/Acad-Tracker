@@ -21,6 +21,8 @@ const MonthProgress: NextPage = () => {
     }
   );
 
+  console.log(daysOfTheMonth.data);
+
   const [editMode, setEditMode] = useState(false);
 
   return (
@@ -35,7 +37,7 @@ const MonthProgress: NextPage = () => {
       </header>
 
       <div className="mb-8 flex w-10/12 flex-col gap-8 lg:w-1/2">
-        {daysOfTheMonth.data?.map(
+        {/* {daysOfTheMonth.data?.map(
           ({ day, dayOfWeek, numberMonth, year, workout }, index) => {
             return (
               <DayCard
@@ -50,7 +52,7 @@ const MonthProgress: NextPage = () => {
               />
             );
           }
-        )}
+        )} */}
       </div>
     </main>
   );

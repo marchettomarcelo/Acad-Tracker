@@ -30,43 +30,37 @@ export const datasRouter = router({
         year: z.number(),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const indexMes = months.indexOf(input.month);
-      
+
       const numeroDias = new Date(input.year, indexMes, 0).getDate();
 
-      const workoutsInMonth = await prisma?.workOutSession.findMany({
-        where: {
-          date: {
-            gte: new Date(input.year, indexMes, 1),
-            lte: new Date(input.year, indexMes, numeroDias),
-          },
-        },
-      });
+      return await ctx.prisma.day.findMany();
 
-      const monthYearDays = [];
+      // const monthYearDays = [];
 
-      for (let day = 1; day <= numeroDias; day++) {
-        const date = new Date(input.year, indexMes, day);
-        const dayOfWeek = date.toLocaleString("default", { weekday: "long" });
+      // for (let day = 1; day <= numeroDias; day++) {
+      //   const date = new Date(input.year, indexMes, day);
+      //   const dayOfWeek = date.toLocaleString("default", { weekday: "long" });
 
-        // see if there is an workout for this day
-        const workout = workoutsInMonth?.find((workout) => {
-          const workoutDate = new Date(workout.date);
-          return workoutDate.getDate() === day;
-        });
+      //   // see if there is an workout for this day
+      //   const temWorkout = workoutsInMonth?.find((workout) => {
 
-        monthYearDays.push({
-          month: input.month,
-          year: input.year,
-          day,
-          dayOfWeek,
-          numberDayOfWeek: date.getDay(),
-          numberMonth: indexMes,
-          workout: workout ? workout : null,
-        });
-      }
+      //     const workoutDate = new Date(workout.date);
+      //     return workoutDate.getDate() === day;
+      //   });
 
-      return monthYearDays;
+      //   monthYearDays.push({
+      //     month: input.month,
+      //     year: input.year,
+      //     day,
+      //     dayOfWeek,
+      //     numberDayOfWeek: date.getDay(),
+      //     numberMonth: indexMes,
+      //     workout: workout ? workout : null,
+      //   });
+      // }
+
+      // return monthYearDays;
     }),
 });
