@@ -1,5 +1,5 @@
 function ProtectedHome() {  
-  return <div>opa</div>;
+  return <div>Seja bem vindo ao acad tracker</div>;
 }
 
 export default ProtectedHome;

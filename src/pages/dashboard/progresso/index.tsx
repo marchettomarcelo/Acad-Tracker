@@ -2,10 +2,10 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { trpc } from "../../utils/trpc";
-import ProtectedPage from "../../utils/ProtectedPage";
+import { trpc } from "../../../utils/trpc";
+import ProtectedPage from "../../../utils/ProtectedPage";
 
-import MonthsCard from "../../components/MonthsCard";
+import MonthsCard from "../../../components/MonthsCard";
 
 const Home: NextPage = () => {
   const availableMonths = trpc.datas.getMeses.useQuery();
@@ -19,10 +19,10 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="grid grid-cols-1 gap-6 p-8 md:grid-cols-2 lg:grid-cols-3 xl:lg:grid-cols-4">
-        {availableMonths.data?.map(({ year, month, }, index) => {
+        {availableMonths.data?.map(({ year, month }, index) => {
           return (
             <Link
-              href={`http://localhost:3000/progresso/${year}?mes=${month}`}
+              href={`/dashboard/progresso/${year}?mes=${month}`}
               key={index}
             >
               <MonthsCard year={year} month={month} />

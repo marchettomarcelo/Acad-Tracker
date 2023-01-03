@@ -84,3 +84,4 @@ model workOutSession {
   
   @@unique([userId, date])
 }
+

@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { trpc } from "../../utils/trpc";
-import DayCard from "../../components/DayCard";
+import { trpc } from "../../../utils/trpc";
+import DayCard from "../../../components/DayCard";
 import { useState } from "react";
+import ProtectedPage from "../../../utils/ProtectedPage";
+import { type NextPage } from "next";
 
-export default function MonthProgress() {
+const MonthProgress: NextPage = () => {
   const router = useRouter();
 
-
   const { ano, mes } = router.query;
+  console.log(router.query);
   const year = Number(ano);
   const month = mes as string;
 
@@ -20,14 +22,14 @@ export default function MonthProgress() {
   );
 
   const [editMode, setEditMode] = useState(false);
-  
+
   return (
     <main className="flex w-full flex-col items-center gap-4">
       <header className="mt-4 flex w-10/12 flex-col items-start lg:w-1/2">
         <h1 className="text-xl font-bold">
           Progresso do mês {month} de {year}
         </h1>
-        <Link href={"http://localhost:3000/progresso"}>
+        <Link href={"/dashboard/progresso"}>
           <p className="font-semibold text-blue-600">&lt;- Voltar</p>
         </Link>
       </header>
@@ -39,7 +41,6 @@ export default function MonthProgress() {
               <DayCard
                 editMode={editMode}
                 setEditMode={setEditMode}
-
                 day={day}
                 dayOfWeek={dayOfWeek}
                 key={index}
@@ -53,4 +54,10 @@ export default function MonthProgress() {
       </div>
     </main>
   );
+};
+
+function ProtectedMonthProgress() {
+  return <ProtectedPage Page={MonthProgress} />;
 }
+
+export default ProtectedMonthProgress;
