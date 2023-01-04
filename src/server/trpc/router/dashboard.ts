@@ -26,7 +26,7 @@ export const dashboardRouter = router({
         return [];
       }
 
-      let status = { trained: 0, skipped: 0, rest: 0 };
+      const status = { trained: 0, skipped: 0, rest: 0 };
 
       // count how many days were skipped in trainedDays
       for (let i = 0; i < trainedDays.length; i++) {
