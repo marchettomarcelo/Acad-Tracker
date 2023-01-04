@@ -10,7 +10,7 @@ export const dashboardRouter = router({
     )
     .query(async ({ input, ctx }) => {
       // count how many days were trained, skipped or rest
-      const trainedDays = await ctx.prisma?.workOutSession.findMany({
+      const trainedDays = await ctx.prisma.workOutSession.findMany({
         where: {
           date: {
             gte: new Date(input.year, 0, 1),
