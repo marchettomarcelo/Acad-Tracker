@@ -35,6 +35,8 @@ function SelectedWorkouts({
   const criarTreino = trpc.treinos.createTreino.useMutation({
     onSuccess: () => {
       context.datas.getDatas.invalidate();
+      setEditMode(false);
+      setEdit(false);
     },
   });
 

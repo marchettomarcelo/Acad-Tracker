@@ -12,7 +12,7 @@ function ProtectedHome() {
 
       <button
         onClick={() => signIn()}
-        className="w-2/12 rounded-md border border-black p-2"
+        className="w-10/12 rounded-md border border-black p-2 md:w-3/12"
       >
         Login / Cadastro
       </button>
