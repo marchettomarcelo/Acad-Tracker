@@ -1,5 +1,6 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
+import { Session } from "inspector";
 
 export const dashboardRouter = router({
   getTrainedRestSkippedDays: protectedProcedure
@@ -9,40 +10,52 @@ export const dashboardRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      // count how many days were trained, skipped or rest
-      const trainedDays = await ctx.prisma.dailyActivity.findMany({
+      // // count how many days were trained, skipped or rest
+      // const trainedDays = await ctx.prisma.dailyActivity.findMany({
+      //   where: {
+      //     date: {
+      //       gte: new Date(input.year, 0, 1),
+      //       lte: new Date(input.year, 11, 31),
+      //     },
+      //     user: {
+      //       id: ctx.session.user.id,
+      //     },
+      //   },
+      // });
+
+      // if (!trainedDays) {
+      //   return [];
+      // }
+
+      const status = { trained: 0, skipped: 0, rest: 0 };
+
+      const activityCounts = await ctx.prisma.dailyActivity.findMany({
         where: {
-          date: {
-            gte: new Date(input.year, 0, 1),
-            lte: new Date(input.year, 11, 31),
-          },
           user: {
             id: ctx.session.user.id,
+          },
+          date: {
+            gte: new Date("2023-01-01T00:00:00.000Z"),
+            lte: new Date("2023-12-31T23:59:59.999Z"),
           },
         },
       });
 
-      if (!trainedDays) {
+      if (!activityCounts || activityCounts.length === 0) {
         return [];
       }
 
-      const status = { trained: 0, skipped: 0, rest: 0 };
-
-      // count how many days were skipped in trainedDays
-      for (let i = 0; i < trainedDays.length; i++) {
-
-        if (trainedDays[i]?.daysActivity === "SKIPPED") {
-          status.skipped++;
-        }
-         if (trainedDays[i]?.daysActivity === "REST") {
-          status.rest++;
-        }
-
-        if (trainedDays[i]?.daysActivity === "WORKOUT") {
+      for (let i = 0; i < activityCounts.length; i++) {
+        if (activityCounts[i]?.daysActivity === "WORKOUT") {
           status.trained++;
         }
+        if (activityCounts[i]?.daysActivity === "SKIPPED") {
+          status.skipped++;
+        }
+        if (activityCounts[i]?.daysActivity === "REST") {
+          status.rest++;
+        }
       }
-
 
       return status;
     }),
