@@ -5,14 +5,17 @@ import DayCard from "../../../components/DayCard";
 import { useState } from "react";
 import ProtectedPage from "../../../utils/ProtectedPage";
 import { type NextPage } from "next";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const MonthProgress: NextPage = () => {
   const router = useRouter();
 
   const { ano, mes } = router.query;
-  console.log(router.query);
+  
   const year = Number(ano);
   const month = mes as string;
+
+  const [parent] = useAutoAnimate<HTMLDivElement>();
 
   const daysOfTheMonth = trpc.datas.getDatas.useQuery(
     { month, year },
@@ -34,7 +37,10 @@ const MonthProgress: NextPage = () => {
         </Link>
       </header>
 
-      <div className="mb-8 flex w-10/12 flex-col gap-8 lg:w-1/2">
+      <div
+        className="ref={parent} mb-8 flex w-10/12 flex-col gap-8 lg:w-1/2"
+        ref={parent}
+      >
         {daysOfTheMonth.data?.map(
           ({ day, dayOfWeek, numberMonth, year, workout }, index) => {
             return (

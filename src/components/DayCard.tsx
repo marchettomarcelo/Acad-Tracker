@@ -2,9 +2,12 @@ import { useState } from "react";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { NoSymbolIcon } from "@heroicons/react/24/outline";
+import { XCircleIcon } from "@heroicons/react/24/outline";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import { workOutSession } from "@prisma/client";
 import SelectedWorkouts from "./SelectedWorkouts";
+import { useEffect, useRef } from "react";
+import autoAnimate from "@formkit/auto-animate";
 
 export default function DayCard({
   day,
@@ -25,6 +28,11 @@ export default function DayCard({
   setEditMode: (value: React.SetStateAction<boolean>) => void;
 }) {
   const [edit, setEdit] = useState(false);
+  const parent = useRef(null);
+
+  useEffect(() => {
+    parent.current && autoAnimate(parent.current);
+  }, [parent]);
 
   let borderColor = "";
   if (workOut) {
@@ -44,6 +52,16 @@ export default function DayCard({
   }
 
   const icone = () => {
+    if (editMode && edit) {
+      return (
+        <XCircleIcon
+          className="h-6 w-6 cursor-pointer"
+          stroke="#000000"
+          onClick={handleEdit}
+          strokeWidth={2}
+        />
+      );
+    }
     if (workOut?.rest) {
       return <ClockIcon className="h-6 w-6" stroke="#FBBF24" strokeWidth={2} />;
     } else if (workOut?.skipped) {
@@ -66,6 +84,7 @@ export default function DayCard({
   return (
     <div
       className={`flex  flex-col  rounded-md border p-6 shadow-md ${borderColor}`}
+      ref={parent}
     >
       <div className="flex flex-row justify-between">
         <h1>
