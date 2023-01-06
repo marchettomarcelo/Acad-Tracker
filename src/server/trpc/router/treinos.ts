@@ -1,30 +1,29 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
-import { MuscleGroup } from "@prisma/client";
+import { DaysActivity, MuscleGroup } from "@prisma/client";
 
 export const treinosRouter = router({
   createTreino: protectedProcedure
     .input(
       z.object({
+        daysActivity: z.nativeEnum(DaysActivity),
+
         cardio: z.boolean(),
-        // muscle group has a type of MuscleGroup[]
+
         muscleGoups: z.array(z.nativeEnum(MuscleGroup)),
-        year: z.number(),
+
         monthIndex: z.number(),
         day: z.number(),
-        rest: z.boolean(),
-        skipped: z.boolean(),
+        year: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const response = await ctx.prisma.workOutSession.create({
+      const response = await ctx.prisma.dailyActivity.create({
         data: {
           cardio: input.cardio,
           muscleGroup: input.muscleGoups,
           userId: ctx.session.user.id,
-          rest: input.rest,
-          skipped: input.skipped,
-
+          daysActivity: input.daysActivity,
           date: new Date(input.year, input.monthIndex, input.day),
         },
       });
@@ -55,7 +54,7 @@ export const treinosRouter = router({
       ];
       const mes = meses.indexOf(input.month);
 
-      const response = await ctx.prisma.workOutSession.findMany({
+      const response = await ctx.prisma.dailyActivity.findMany({
         where: {
           userId: ctx.session.user.id,
           date: {
@@ -73,18 +72,16 @@ export const treinosRouter = router({
         workOutId: z.string(),
         cardio: z.boolean(),
         muscleGoups: z.array(z.nativeEnum(MuscleGroup)),
-        skipped: z.boolean(),
-        rest: z.boolean(),
+        daysActivity: z.nativeEnum(DaysActivity),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const response = await ctx.prisma.workOutSession.update({
+      const response = await ctx.prisma.dailyActivity.update({
         where: {
           id: input.workOutId,
         },
         data: {
-          skipped: input.skipped,
-          rest: input.rest,
+          daysActivity: input.daysActivity,
           cardio: input.cardio,
           muscleGroup: input.muscleGoups,
         },

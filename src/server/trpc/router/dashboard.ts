@@ -10,7 +10,7 @@ export const dashboardRouter = router({
     )
     .query(async ({ input, ctx }) => {
       // count how many days were trained, skipped or rest
-      const trainedDays = await ctx.prisma.workOutSession.findMany({
+      const trainedDays = await ctx.prisma.dailyActivity.findMany({
         where: {
           date: {
             gte: new Date(input.year, 0, 1),
@@ -30,14 +30,19 @@ export const dashboardRouter = router({
 
       // count how many days were skipped in trainedDays
       for (let i = 0; i < trainedDays.length; i++) {
-        if (trainedDays[i]?.skipped) {
+
+        if (trainedDays[i]?.daysActivity === "SKIPPED") {
           status.skipped++;
-        } else if (trainedDays[i]?.rest) {
+        }
+         if (trainedDays[i]?.daysActivity === "REST") {
           status.rest++;
+        }
+
+        if (trainedDays[i]?.daysActivity === "WORKOUT") {
+          status.trained++;
         }
       }
 
-      status.trained = trainedDays.length - status.skipped - status.rest;
 
       return status;
     }),

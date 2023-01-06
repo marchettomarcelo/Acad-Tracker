@@ -1,8 +1,8 @@
-import { MuscleGroup, workOutSession } from "@prisma/client";
+import { MuscleGroup, dailyActivity } from "@prisma/client";
 import TreinoCard from "./TreinoCard";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
-import { stat } from "fs/promises";
+
 
 function SelectedWorkouts({
   day,
@@ -17,14 +17,14 @@ function SelectedWorkouts({
   day: number;
   numberMonth: number;
   year: number;
-  workOut?: workOutSession;
+  workOut?: dailyActivity;
   setEditMode: (value: React.SetStateAction<boolean>) => void;
 }) {
   // --- State ---
   const [cardio, setCardio] = useState(workOut ? workOut.cardio : false);
   const [selectedOption, setSelectedOption] = useState<
-    "skipped" | "treinou" | "rest"
-  >(workOut?.skipped ? "skipped" : workOut?.rest ? "rest" : "treinou");
+    "REST" | "SKIPPED" | "WORKOUT"
+  >(workOut?.daysActivity || "WORKOUT");
 
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<
     MuscleGroup[]
@@ -55,8 +55,8 @@ function SelectedWorkouts({
     criarTreino.mutate({
       day,
       cardio,
-      skipped: selectedOption === "skipped",
-      rest: selectedOption === "rest",
+      daysActivity: selectedOption,
+      
       year,
       muscleGoups: novo,
       monthIndex: numberMonth,
@@ -70,7 +70,7 @@ function SelectedWorkouts({
 
   // --- helper function to change state ---
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value as "skipped" | "treinou" | "rest");
+    setSelectedOption(event.target.value as "REST" | "SKIPPED" | "WORKOUT");
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,8 +93,7 @@ function SelectedWorkouts({
       workOutId: workOut?.id,
       cardio,
       muscleGoups: selectedMuscleGroups,
-      skipped: selectedOption === "skipped",
-      rest: selectedOption === "rest",
+      daysActivity: selectedOption,
     });
   };
 
@@ -116,10 +115,10 @@ function SelectedWorkouts({
                 key={1}
                 id={day as unknown as string}
                 type="radio"
-                checked={selectedOption === "rest"}
+                checked={selectedOption === "REST"}
                 onChange={handleOptionChange}
                 name="list-radio"
-                value="rest"
+                value="REST"
                 className="bg-gray h-4 w-4 cursor-pointer rounded border-gray-300"
               />
               <label className="ml-2 w-full py-3 text-sm font-medium text-gray-900 ">
@@ -133,10 +132,10 @@ function SelectedWorkouts({
                 key={2}
                 id={day as unknown as string}
                 type="radio"
-                value="skipped"
+                value="SKIPPED"
                 name="list-radio"
                 className="bg-gray h-4 w-4 cursor-pointer rounded border-gray-300"
-                checked={selectedOption === "skipped"}
+                checked={selectedOption === "SKIPPED"}
                 onChange={handleOptionChange}
               />
               <label className="ml-2 w-full py-3 text-sm font-medium text-gray-900 ">
@@ -150,10 +149,10 @@ function SelectedWorkouts({
                 key={3}
                 id={day as unknown as string}
                 type="radio"
-                value="treinou"
+                value="WORKOUT"
                 name="list-radio"
                 className="bg-gray h-4 w-4 cursor-pointer rounded border-gray-300"
-                checked={selectedOption === "treinou"}
+                checked={selectedOption === "WORKOUT"}
                 onChange={handleOptionChange}
               />
               <label className="ml-2 w-full py-3 text-sm font-medium text-gray-900 ">
@@ -163,7 +162,7 @@ function SelectedWorkouts({
           </li>
         </ul>
 
-        {selectedOption == "treinou" && (
+        {selectedOption == "WORKOUT" && (
           <>
             <p className="font-semibold">
               Selecione os grupos musculares treinados:

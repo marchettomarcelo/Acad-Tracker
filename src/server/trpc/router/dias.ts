@@ -35,7 +35,7 @@ export const datasRouter = router({
       
       const numeroDias = new Date(input.year, indexMes, 0).getDate();
 
-      const workoutsInMonth = await ctx.prisma.workOutSession.findMany({
+      const workoutsInMonth = await ctx.prisma.dailyActivity.findMany({
         where: {
           date: {
             gte: new Date(input.year, indexMes, 1),

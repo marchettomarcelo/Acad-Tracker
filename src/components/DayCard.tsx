@@ -4,7 +4,7 @@ import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { NoSymbolIcon } from "@heroicons/react/24/outline";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 import { ClockIcon } from "@heroicons/react/24/outline";
-import { workOutSession } from "@prisma/client";
+import { dailyActivity } from "@prisma/client";
 import SelectedWorkouts from "./SelectedWorkouts";
 import { useEffect, useRef } from "react";
 import autoAnimate from "@formkit/auto-animate";
@@ -22,7 +22,7 @@ export default function DayCard({
   dayOfWeek: string;
   numberMonth: number;
   year: number;
-  workOut?: workOutSession;
+  workOut?: dailyActivity;
 
   editMode: boolean;
   setEditMode: (value: React.SetStateAction<boolean>) => void;
@@ -36,9 +36,9 @@ export default function DayCard({
 
   let borderColor = "";
   if (workOut) {
-    if (workOut.skipped === true) {
+    if (workOut.daysActivity === "SKIPPED") {
       borderColor = "border-red-500";
-    } else if (workOut.rest === true) {
+    } else if (workOut.daysActivity === "REST") {
       borderColor = "border-yellow-500";
     } else {
       borderColor = "border-green-500";
@@ -62,9 +62,10 @@ export default function DayCard({
         />
       );
     }
-    if (workOut?.rest) {
+
+    if (workOut?.daysActivity === "REST") {
       return <ClockIcon className="h-6 w-6" stroke="#FBBF24" strokeWidth={2} />;
-    } else if (workOut?.skipped) {
+    } else if (workOut?.daysActivity === "SKIPPED") {
       return (
         <NoSymbolIcon className="h-6 w-6" stroke="#EF4444" strokeWidth={2} />
       );

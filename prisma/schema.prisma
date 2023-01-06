@@ -50,7 +50,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  workOutSession workOutSession[]
+  dailyActivity dailyActivity[]
 }
 
 model VerificationToken {
@@ -72,15 +72,21 @@ enum MuscleGroup {
   FOREARMS
 }
 
-model workOutSession {
+enum DaysActivity {
+  REST 
+  SKIPPED
+  WORKOUT
+}
+
+model dailyActivity {
+  
   id String @id @default(cuid())
   muscleGroup MuscleGroup[]
   cardio Boolean
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
   date DateTime
-  rest Boolean @default(false)
-  skipped Boolean @default(false)
+  daysActivity DaysActivity
   
   @@unique([userId, date])
 }
