@@ -41,10 +41,6 @@ export const dashboardRouter = router({
         },
       });
 
-      if (!activityCounts || activityCounts.length === 0) {
-        return [];
-      }
-
       for (let i = 0; i < activityCounts.length; i++) {
         if (activityCounts[i]?.daysActivity === "WORKOUT") {
           status.trained++;

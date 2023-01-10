@@ -23,7 +23,6 @@ function ProtectedHome() {
             Logado como: <strong>{session.user?.email}</strong>{" "}
           </p>
           <Link href={"/dashboard"} className="text-lg text-blue-600">
-            {" "}
             Ver dashboard
           </Link>
 
@@ -35,3 +34,4 @@ function ProtectedHome() {
 }
 
 export default ProtectedHome;
+
