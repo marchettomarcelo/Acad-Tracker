@@ -8,12 +8,10 @@ import ProtectedPage from "../../../utils/ProtectedPage";
 import MonthsCard from "../../../components/MonthsCard";
 
 const Home: NextPage = () => {
-  const availableMonths = trpc.datas.getMeses.useQuery();
+  const availableMonths = trpc.datas.getMesespublic.useQuery();
 
   return (
     <>
-      
-
       <div className="grid grid-cols-1 gap-6 p-8 md:grid-cols-2 lg:grid-cols-3 xl:lg:grid-cols-4">
         {availableMonths.data?.map(({ year, month }, index) => {
           return (

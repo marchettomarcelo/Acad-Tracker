@@ -1,4 +1,4 @@
-import { router, protectedProcedure } from "../trpc";
+import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from "zod";
 
 const months = [
@@ -17,7 +17,7 @@ const months = [
 ];
 
 export const datasRouter = router({
-  getMeses: protectedProcedure.query(async () => {
+  getMesespublic: publicProcedure.query(async () => {
     let monthYear = [];
 
     const years = [2023];
