@@ -18,7 +18,7 @@ const months = [
 
 export const datasRouter = router({
   getMesespublic: publicProcedure.query(async () => {
-    let monthYear = [];
+    const monthYear = [];
 
     const years = [2023];
     for (let i = 0; i < years.length; i++) {
