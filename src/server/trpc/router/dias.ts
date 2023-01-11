@@ -18,8 +18,16 @@ const months = [
 
 export const datasRouter = router({
   getMeses: protectedProcedure.query(async () => {
-    const year = 2023;
-    const monthYear = months.map((month) => ({ month, year }));
+    let monthYear = [];
+
+    const years = [2023];
+    for (let i = 0; i < years.length; i++) {
+      const year = years[i];
+
+      for (let j = 0; j < 12; j++) {
+        monthYear.push({ year, month: months[j] });
+      }
+    }
     return monthYear;
   }),
 
@@ -32,7 +40,7 @@ export const datasRouter = router({
     )
     .query(async ({ input, ctx }) => {
       const indexMes = months.indexOf(input.month);
-      
+
       const numeroDias = new Date(input.year, indexMes, 0).getDate();
 
       const workoutsInMonth = await ctx.prisma.dailyActivity.findMany({
